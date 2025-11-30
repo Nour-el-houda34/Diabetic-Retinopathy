@@ -1,0 +1,77 @@
+body {
+    margin: 0;
+    background: #0f1629;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* SIDEBAR */
+.sidebar {
+    width: 240px;
+    height: 100vh;
+    background: #141c2f;
+    padding: 30px 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    border-right: 1px solid #22304a;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #00eaff;
+    margin-bottom: 40px;
+}
+
+.nav-item {
+    display: block;
+    padding: 12px 10px;
+    margin-bottom: 10px;
+    color: #dbe2ef;
+    text-decoration: none;
+    font-size: 18px;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.nav-item:hover {
+    background: #1f2a44;
+    color: #00eaff;
+}
+
+/* CONTENT */
+.content {
+    margin-left: 270px;
+    padding: 40px;
+}
+
+/* CARDS */
+.card {
+    background: #1a2238;
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.3);
+    margin-bottom: 25px;
+    width: 90%;
+}
+
+.card h2 {
+    color: #00eaff;
+}
+
+/* BUTTONS */
+.button {
+    display: inline-block;
+    padding: 12px 25px;
+    background: #00eaff;
+    color: #0f1629;
+    font-weight: bold;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.button:hover {
+    background: #00bcd4;
+}

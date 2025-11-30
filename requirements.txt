@@ -1,0 +1,18 @@
+# --- CORE WEB FRAMEWORK ---
+Flask==3.0.3
+Werkzeug==3.0.2  # Compatible avec Flask 3.x
+
+# --- MACHINE LEARNING / DEEP LEARNING ---
+tensorflow==2.15.0  # Version stable, supporte Keras intégré
+numpy==1.26.4        # Compatible avec TensorFlow 2.15.0
+
+# --- IMAGE PROCESSING ---
+Pillow==10.3.0
+opencv-python==4.10.0.84
+
+# --- DATA SCIENCE / VISUALISATION ---
+matplotlib==3.8.3
+scikit-learn==1.4.1
+
+# --- PRODUCTION SERVER (si déploiement Linux/WSL) ---
+gunicorn==21.2.0

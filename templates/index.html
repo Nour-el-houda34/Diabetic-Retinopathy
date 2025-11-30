@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard - AI Retina Scanner</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* RESET */
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+    font-family:'Poppins',sans-serif;
+    background:#f5f7fb;
+    color:#2c3e50;
+    padding:20px;
+    transition: all 0.3s ease;
+}
+
+/* DARK MODE */
+body.dark-mode{
+    background:#1e293b;
+    color:#f1f5f9;
+}
+
+/* NAVBAR */
+.navbar{
+    position:fixed;top:0;left:0;width:100%;
+    padding:18px 40px;
+    display:flex;justify-content:space-between;align-items:center;
+    background:rgba(255,255,255,0.7);
+    backdrop-filter:blur(20px);
+    border-bottom:1px solid rgba(0,0,0,0.08);
+    z-index:50;
+    transition: all 0.3s ease;
+}
+body.dark-mode .navbar{
+    background:rgba(31,41,55,0.8);
+    border-bottom:1px solid rgba(255,255,255,0.1);
+}
+.nav-title{
+    font-size:1.8rem;
+    font-weight:700;
+    color:#2563eb;
+    letter-spacing:0.5px;
+}
+body.dark-mode .nav-title{
+    color:#38bdf8;
+}
+
+/* TOGGLE DARK MODE */
+.toggle-container{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+.toggle-label{
+    font-size:0.95rem;
+    font-weight:500;
+    color:#2563eb;
+    user-select:none;
+}
+body.dark-mode .toggle-label{
+    color:#38bdf8;
+}
+.toggle-switch{
+    cursor:pointer;
+    background:#2563eb;
+    border-radius:12px;
+    width:50px;
+    height:25px;
+    position:relative;
+    flex-shrink:0;
+}
+.toggle-switch::after{
+    content:'';
+    position:absolute;
+    top:2px; left:2px;
+    width:21px; height:21px;
+    background:#fff;
+    border-radius:50%;
+    transition: 0.3s;
+}
+body.dark-mode .toggle-switch::after{
+    left:27px;
+}
+
+/* CONTAINER */
+.container{max-width:900px;margin:120px auto;padding:20px;transition: all 0.3s ease;}
+
+/* HEADER */
+.header-desc{text-align:center;margin-bottom:50px;}
+.header-desc h1{
+    font-size:2.6rem;
+    font-weight:700;
+    color:#1e40af;
+    margin-bottom:12px;
+}
+body.dark-mode .header-desc h1{
+    color:#38bdf8;
+}
+.header-desc p{
+    font-size:1.15rem;
+    color:#64748b;
+    max-width:680px;
+    margin:auto;
+}
+body.dark-mode .header-desc p{
+    color:#cbd5e1;
+}
+
+/* CARDS */
+.cards{
+    display:flex;justify-content:center;gap:25px;
+    flex-wrap:wrap;margin-bottom:50px;
+}
+.card{
+    background:rgba(255,255,255,0.75);
+    backdrop-filter:blur(16px);
+    border-radius:24px;
+    padding:30px 20px;
+    width:260px;
+    text-align:center;
+    cursor:pointer;
+    border:1px solid rgba(0,0,0,0.06);
+    transition:0.35s;
+}
+body.dark-mode .card{
+    background:rgba(31,41,55,0.75);
+    border:1px solid rgba(255,255,255,0.1);
+}
+.card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 8px 22px rgba(0,0,0,0.12);
+}
+.card h2{
+    font-size:1.4rem;
+    font-weight:600;
+    color:#2563eb;
+    margin-bottom:8px;
+}
+body.dark-mode .card h2{
+    color:#38bdf8;
+}
+.card p{
+    font-size:0.95rem;
+    color:#475569;
+}
+body.dark-mode .card p{
+    color:#cbd5e1;
+}
+
+/* SECTION TITLES */
+section h2{
+    text-align:center;
+    font-size:1.9rem;
+    color:#1e40af;
+    margin-bottom:20px;
+}
+body.dark-mode section h2{
+    color:#38bdf8;
+}
+
+/* UPLOAD */
+.upload-form input[type=file]{
+    width:100%;padding:15px;
+    border-radius:16px;
+    border:2px dashed #94a3b8;
+    background:#f8fafc;
+    cursor:pointer;
+    transition:0.3s;
+    margin-bottom:15px;
+}
+body.dark-mode .upload-form input[type=file]{
+    border-color:#64748b;
+    background:#334155;
+    color:#f1f5f9;
+}
+.upload-form input[type=file]:hover{
+    border-color:#2563eb;
+}
+
+/* BUTTON */
+.upload-form button{
+    width:100%;
+    padding:15px;
+    font-size:17px;
+    font-weight:600;
+    border:none;
+    border-radius:16px;
+    background:#2563eb;
+    color:white;
+    cursor:pointer;
+    transition:0.3s;
+}
+body.dark-mode .upload-form button{
+    background:#1e40af;
+}
+.upload-form button:hover{
+    background:#1d4ed8;
+}
+
+/* IMAGE PREVIEW */
+#preview{
+    display:none;
+    margin-top:20px;
+    max-width:100%;
+    border-radius:16px;
+    box-shadow:0 6px 26px rgba(0,0,0,0.15);
+}
+
+/* LOADER */
+.loader{
+    display:none;
+    margin:18px auto;
+    width:50px;height:50px;
+    border-radius:50%;
+    border:5px solid #dbeafe;
+    border-top:5px solid #2563eb;
+    animation:spin 1s linear infinite;
+}
+body.dark-mode .loader{
+    border:5px solid #334155;
+    border-top:5px solid #38bdf8;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* HISTORY TABLE */
+.history-table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:25px;
+}
+.history-table th{
+    background:#dbeafe;
+    padding:12px;
+    font-weight:600;
+    color:#1e3a8a;
+}
+body.dark-mode .history-table th{
+    background:#1e293b;
+    color:#38bdf8;
+}
+.history-table td{
+    padding:10px;
+    border-bottom:1px solid #e2e8f0;
+    color:#475569;
+}
+body.dark-mode .history-table td{
+    color:#cbd5e1;
+    border-bottom:1px solid #334155;
+}
+.history-table tr:hover{
+    background:#eff6ff;
+}
+body.dark-mode .history-table tr:hover{
+    background:#334155;
+}
+
+/* FOOTER */
+footer{
+    text-align:center;
+    margin-top:60px;
+    color:#64748b;
+    font-size:14px;
+}
+body.dark-mode footer{
+    color:#cbd5e1;
+}
+</style>
+</head>
+
+<body>
+
+<div class="navbar">
+    <div class="nav-title">AI Retina Scanner</div>
+    <div class="toggle-container">
+        <span class="toggle-label">Mode sombre</span>
+        <div class="toggle-switch" onclick="toggleDarkMode()"></div>
+    </div>
+</div>
+
+<div class="container">
+
+    <div class="header-desc">
+        <h1>🩺 Détecteur Automatique de Rétinopathie Diabétique</h1>
+        <p>Analysez vos images du fond d’œil grâce à un modèle d’intelligence artificielle avancé.</p>
+    </div>
+
+    <div class="cards">
+        <div class="card" onclick="document.getElementById('start').scrollIntoView({behavior:'smooth'});">
+            <h2>Commencer l'analyse</h2>
+            <p>Importer une image pour la diagnostiquer.</p>
+        </div>
+
+        <div class="card" onclick="document.getElementById('history').scrollIntoView({behavior:'smooth'});">
+            <h2>Historique</h2>
+            <p>Voir toutes les images analysées.</p>
+        </div>
+    </div>
+
+    <!-- START -->
+    <section id="start">
+        <h2>Analyse d'image</h2>
+        <div class="section-content">
+
+            <form class="upload-form" method="POST" enctype="multipart/form-data" onsubmit="showLoader()">
+                <input type="file" name="image" accept="image/*" required onchange="previewImage(event)">
+                <img id="preview">
+                <div class="loader" id="loader"></div>
+                <button type="submit">Analyser l'image</button>
+            </form>
+
+            {% if image_path %}
+            <div style="margin-top:20px;text-align:center;">
+                <h3 style="color:#1e3a8a;font-size:1.3rem;">Résultat : {{ result }}</h3>
+                <img src="{{ url_for('static', filename='uploads/' ~ image_path) }}" 
+                     alt="Image analysée"
+                     style="max-width:300px;border-radius:16px;margin-top:10px;">
+            </div>
+            {% endif %}
+
+        </div>
+    </section>
+
+    <!-- HISTORY -->
+    <section id="history">
+        <h2>Historique des analyses</h2>
+        <div class="section-content">
+
+            {% if history %}
+            <table class="history-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Image</th>
+                        <th>Résultat</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in history %}
+                    <tr>
+                        <td>{{ item[0] }}</td>
+                        <td>
+                            <img src="{{ url_for('static', filename='uploads/' ~ item[1]) }}" 
+                                 alt="{{ item[1] }}"
+                                 style="width:70px;border-radius:10px;margin-bottom:5px;">
+                            <br>{{ item[1] }}
+                        </td>
+                        <td>{{ item[2] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {% else %}
+            <p style="color:#94a3b8;">Aucun historique pour le moment.</p>
+            {% endif %}
+
+        </div>
+    </section>
+
+</div>
+
+<footer>© 2025 • AI Retina Scanner • ISI M2</footer>
+
+<script>
+function previewImage(event){
+    const img=document.getElementById("preview");
+    img.src=URL.createObjectURL(event.target.files[0]);
+    img.style.display="block";
+}
+function showLoader(){
+    document.getElementById("loader").style.display="block";
+}
+function toggleDarkMode(){
+    document.body.classList.toggle('dark-mode');
+}
+</script>
+
+</body>
+</html>
