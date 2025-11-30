@@ -184,38 +184,11 @@ python app.py
 * Confiance : **91.4%**
 * Image affichée + boutons pour télécharger le rapport
 
----
 
-## 💾 Déploiement
 
-Idées : Docker, hébergement sur Heroku / Render / Railway, ou un serveur cloud (GCP/AWS)
 
-**Docker (extrait Dockerfile)** :
 
-```dockerfile
-FROM python:3.9-slim
-WORKDIR /app
-COPY . /app
-RUN pip install -r requirements.txt
-CMD ["python","app.py"]
-```
 
----
-
-## 🔍 Améliorations futures
-
-* Passer à EfficientNetB4 ou Swin Transformer
-* Interprétabilité : Grad-CAM / LIME
-* API REST complète avec authentification
-* Frontend React/Vue pour une UI plus riche
-* Base de données pour stocker l’historique des analyses
-* Génération automatique de rapports PDF
-
----
-
-## ✅ Résultats et rapports
-
-Inclure ici les graphiques principaux (courbes d’apprentissage, matrice de confusion, ROC) et un petit résumé des performances.
 
 ---
 
