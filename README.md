@@ -1,235 +1,238 @@
-📘 Classification de la Rétinopathie Diabétique (Deep Learning + Interface Web)
+# 📘 Classification de la Rétinopathie Diabétique (Deep Learning + Interface Web)
 
-Projet complet de Deep Learning ayant pour objectif la classification automatique des images de fond d’œil en 5 niveaux de sévérité de la Rétinopathie Diabétique, intégrant :
+**Projet** — Deep Learning · Flask · TensorFlow · ISI M2 (2025–2026)
 
-🧠 Un modèle de Deep Learning TensorFlow/Keras
+---
 
-🌐 Une interface Web (Flask)
+## ✨ Description
 
-📊 Un pipeline complet : data exploration → entraînement → évaluation → déploiement
+Système complet d’aide au diagnostic capable de classifier automatiquement des images de fond d’œil en **5 classes** de sévérité de la rétinopathie diabétique. Le projet inclut : prétraitement d’images, entraînement d’un modèle CNN (fine-tuning), évaluation et déploiement via une interface web Flask.
 
-🖼️ Un système d’upload + prédiction + historique
+---
 
-Projet réalisé dans le cadre du module :
-“Projet Deep Learning — ISI M2 — Année 2025–2026”
+## 🎯 Objectif
 
-🎯 Objectif du Projet
+Classer une image de fond d’œil en l’une des classes suivantes :
 
-Développer un système d’aide au diagnostic capable de classifier automatiquement les images de rétinopathie diabétique en 5 classes :
+| Label | Classe                           |
+| ----: | :------------------------------- |
+|     0 | Healthy (Sain)                   |
+|     1 | Mild DR (Léger)                  |
+|     2 | Moderate DR (Modéré)             |
+|     3 | Severe DR (Sévère)               |
+|     4 | Proliferative DR (Proliférative) |
 
-Label	Classe
-0	Healthy (Sain)
-1	Mild DR (Léger)
-2	Moderate DR (Modéré)
-3	Severe DR (Sévère)
-4	Proliferative DR (Proliférative)
+Le modèle renvoie la classe prédite et un score de confiance.
 
-Le modèle analyse l’image de fond d’œil et renvoie la classe correspondante avec un score de probabilité.
+---
 
-🧰 Technologies Utilisées
-Backend & Deep Learning
+## 🧰 Technologies
 
-Python 3.8+
+**Backend & Deep Learning**: Python 3.8+, TensorFlow/Keras, scikit-learn, pandas, numpy
 
-TensorFlow 2.x / Keras
+**Traitement d’images**: OpenCV, Pillow
 
-Scikit-learn
+**Visualisation**: matplotlib, seaborn
 
-Pandas / NumPy
+**Interface Web**: Flask (possibilité Django/DRF)
 
-Traitement d’images
+**Outils**: Google Colab (GPU), Git/GitHub, Jupyter Notebook
 
-OpenCV
+---
 
-Pillow (PIL)
+## 🚀 Fonctionnalités principales
 
-Visualisation
+* Upload d’image via l’interface web
+* Prédiction en temps réel (classe + probabilité)
+* Historique des analyses (`history.txt` ou DB)
+* Endpoints API REST (`/predict`)
+* Visualisation de la prédiction (affichage image + label)
 
-Matplotlib
+---
 
-Seaborn
+## 📥 Installation rapide
 
-Interface Web
-
-Flask 
-
-Outils
-
-Google Colab (GPU)
-
-Git & GitHub
-
-Jupyter Notebook
-
-📥 Installation
-1️⃣ Cloner le projet
+```bash
+# Cloner le projet
 git clone https://github.com/Nour-el-houda34/Diabetic-Retinopathy.git
 cd Diabetic-Retinopathy
 
-2️⃣ Installer les dépendances
+# Installer les dépendances (préférer un virtualenv)
 pip install -r requirements.txt
+```
+
+Alternative (exemples de paquets si pas de requirements):
+
+```bash
+pip install tensorflow opencv-python pillow numpy pandas matplotlib seaborn scikit-learn flask
+```
+
+---
+
+## 📁 Structure du projet (suggestion)
+
+```
+Diabetic-Retinopathy/
+├── README.md
+├── requirements.txt
+├── app.py                  # Flask app
+├── scripts/
+│   ├── preprocess.py
+│   ├── train_model.py
+│   └── evaluate_model.py
+├── notebooks/              # notebooks d'expérimentation
+├── models/
+│   └── model.h5
+├── static/
+└── templates/
+    └── index.html
+```
+
+---
+
+## 🔬 Prétraitement (pipeline)
+
+1. **Redimensionnement** → `224×224`
+2. **Normalisation** → `/255`
+3. **Amélioration** → equalize, CLAHE (optionnel)
+4. **Filtrage** → suppression du bruit (GaussianBlur si besoin)
+5. **Recadrage circulaire** → focaliser la région retina
+6. **Augmentations** pour l'entraînement : rotation, flip, zoom, shift, brightness
 
 
-ou :
+---
 
-pip install tensorflow opencv-python pillow numpy pandas matplotlib seaborn scikit-learn flask django djangorestframework
+## 🧠 Modèle
 
-3️⃣ Télécharger le dataset
+**Architecture** : ResNet50 (base) — option EfficientNet selon version
 
-Télécharger depuis Kaggle :
+**Top layers** :
 
-data/DiabeticBahia/
+* GlobalAveragePooling2D
+* Dense(256)
+* Dropout(0.3)
+* Dense(5, activation='softmax')
 
-🔬 Pipeline de Prétraitement
+**Compilation** :
 
-L’image passe par :
+```py
+optimizer = tf.keras.optimizers.Adam(learning_rate=1e-4)
+loss = 'sparse_categorical_crossentropy'
+metrics = ['accuracy']
+```
 
-Redimensionnement → 224×224
+**Callbacks** : `EarlyStopping`, `ReduceLROnPlateau`, `ModelCheckpoint`
 
-Normalisation → /255
+---
 
-Filtrage (optional)
+## 🏋️ Entraînement
 
-Amélioration du contraste
+```bash
+python scripts/train_model.py --data_dir data/DiabeticBahia --epochs 30 --batch_size 32
+```
 
-Suppression du bruit
+Le script doit :
 
-Recadrage circulaire du fond d’œil
+* charger et splitter le dataset (train/val/test)
+* appliquer augmentations
+* entraîner et sauvegarder `models/model.h5`
 
-🧠 Modèle de Deep Learning
-🏛️ Architecture utilisée :
+---
 
-Base : ResNet50 (ou EfficientNet selon la version)
+## 🧪 Évaluation
 
-Pré-entraînement : ImageNet
+```bash
+python scripts/evaluate_model.py --model models/model.h5 --data_dir data/DiabeticBahia
+```
 
-Fine-tuning sur les 5 classes
+Indicateurs calculés : Accuracy, Precision, Recall, F1-score, AUC, matrice de confusion.
 
-Ajout de couches :
+**Exemple de resultat résumé** :
 
-GlobalAveragePooling2D
+| Mesure             | Valeur |
+| ------------------ | -----: |
+| Accuracy (val)     |    89% |
+| AUC                |  95.9% |
+| F1-score (Healthy) |  94.3% |
 
-Dense (256 neurons)
+> Note : Ces valeurs servent d’exemple — reportez les métriques réelles du script `evaluate_model.py`.
 
-Dropout(0.3)
+---
 
-Dense(5, softmax)
+## 🌐 Interface Web (Flask)
 
-⚙️ Compilateur :
-optimizer = Adam(lr=0.0001)
-loss = "sparse_categorical_crossentropy"
-metrics = ["accuracy"]
+**Lancer l’app localement** :
 
-🔁 Callbacks :
-
-EarlyStopping
-
-ReduceLROnPlateau
-
-ModelCheckpoint
-
-🏋️ Entraînement
-python scripts/train_model.py
-
-
-Ce script :
-
-charge le dataset
-
-applique les augmentations (rotation, zoom, flip, shift…)
-
-entraîne le modèle
-
-enregistre model.h5
-
-🧪 Évaluation
-python scripts/evaluate_model.py
-
-
-Indicateurs utilisés :
-
-Accuracy
-
-Precision
-
-Recall
-
-F1-score
-
-AUC
-
-Matrice de confusion
-
-📊 Résultats obtenus
-
-Mesure	Valeur
-Accuracy (validation)	89%
-AUC	95.9%
-F1-Score Healthy	94.3%
-Loss	Stable, pas d’overfitting
-
-🌐 Interface Web (Flask)
-Fonctionnalités :
-
-✔ Upload d’image
-✔ Prédiction en temps réel
-✔ Sauvegarde dans history.txt
-✔ Affichage de l’image + classe
-✔ API /predict (si version Django REST Framework)
-
-Démo d'utilisation :
-
-Ouvrir l'interface
-
-Sélectionner une image
-
-Cliquer sur Analyser
-
-Le système affiche :
-
-Classe prédite : Moderate DR (2)
-Confiance : 91.4%
-
-🚀 Lancer l’interface Web
-
-Avec Flask :
+```bash
 python app.py
+# puis ouvrir http://127.0.0.1:5000
+```
+
+**Endpoints (exemples)** :
+
+* `GET /` → page d’accueil (upload)
+* `POST /predict` → reçoit image, renvoie JSON `{label, class_name, confidence}`
+* Option : `GET /history` → afficher historique
+
+**Sauvegarde de l’historique** : `history.txt` (format CSV/JSON) ou stocker dans une DB SQLite/MySQL
+
+---
+
+## 📄 Exemple de sortie (UI)
+
+* Classe prédite : **Moderate DR (2)**
+* Confiance : **91.4%**
+* Image affichée + boutons pour télécharger le rapport
+
+---
+
+## 💾 Déploiement
+
+Idées : Docker, hébergement sur Heroku / Render / Railway, ou un serveur cloud (GCP/AWS)
+
+**Docker (extrait Dockerfile)** :
+
+```dockerfile
+FROM python:3.9-slim
+WORKDIR /app
+COPY . /app
+RUN pip install -r requirements.txt
+CMD ["python","app.py"]
+```
+
+---
+
+## 🔍 Améliorations futures
+
+* Passer à EfficientNetB4 ou Swin Transformer
+* Interprétabilité : Grad-CAM / LIME
+* API REST complète avec authentification
+* Frontend React/Vue pour une UI plus riche
+* Base de données pour stocker l’historique des analyses
+* Génération automatique de rapports PDF
+
+---
+
+## ✅ Résultats et rapports
+
+Inclure ici les graphiques principaux (courbes d’apprentissage, matrice de confusion, ROC) et un petit résumé des performances.
+
+---
+
+## 👥 Auteurs
+
+* **BEN CHEIKHE Chaimae** — Développement, Interface Graphique, Intégration
+* **HAMIDI Nour El Houda** — Deep Learning, Prétraitement, Data Exploration
+* **TAIMOURIA El Bahia** — Dataset, Entraînement, Gestion GitHub
+
+---
+
+## 📜 Licence
+
+Ce projet est fourni sous licence MIT. Voir `LICENSE` pour plus de détails.
+
+---
 
 
-🧩 Améliorations Futures
 
-Passage à EfficientNet B4 ou Swin Transformer
 
-Déploiement sur Docker
-
-API REST complète avec authentification
-
-Interface React / Vue.js
-
-Base de données pour historique réel
-
-Rapport PDF automatique après analyse
-
-Interprétation Grad-CAM (expliquer où le modèle regarde)
-
-👥 Auteurs
-
-BEN CHEIKHE Chaimae – Développement , Interface Graphique , Intégration
-
-HAMIDI Nour El Houda – Deep Learning, Prétraitement, Data Exploration
-
-TAIMOURIA El Bahia – Dataset, Entraînement, Gestion GitHub
-
-📚 Projet « Deep Learning — ISI M2 — 2025–2026 »
-
-Projet académique visant à appliquer les concepts de :
-
-Vision par ordinateur
-
-Deep Learning
-
-Prétraitement d’images
-
-Modèles CNN avancés
-
-Déploiement d’un modèle IA
